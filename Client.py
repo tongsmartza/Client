@@ -1,45 +1,32 @@
+# Group Network need some Carry
+#       58070501006 Karntawan   Udomluksopin
+#       58070501046 Peerakit    Boonkittiporn
+#       58070501054 Methawat    Thanapairin
+#       58070501069 Sirapong    Phoosawan
+ 
 from socket import * 
 import sys
 
 MAX_BUF = 2048     # Size of buffer to store received bytes
 SERV_PORT = 50000  # Server port number
 
-#def getport():
-        #s = socket(AF_INET, SOCK_DGRAM) # Create UDP socket
-        #addr2 = ('127.0.0.1', 0)          # Socket address
-        #s.bind(addr2)                    # Bind socket to address
-        #addr2 , port = s.getsockname()
-        #print(port)
-        #return port
-
 addr = ('127.0.0.1', 50000)
 s = socket(AF_INET, SOCK_DGRAM)
-s.connect(addr)
+s.connect(addr) #Socket Connected to Server
 
-#port = getport()
-#addre = ('127.0.0.1', port)
-#s2 = socket(AF_INET, SOCK_DGRAM)
-#s2.bind(addre)
-
-#s.sendto(str(port).encode('utf-8'), addr)
-
-print ('UDP server started ...')
+print ('----- Subscriber is started -----')
 
 while(1):
-    subscribe = input('Enter your Subscribe : ')
+    subscribe = input('\tEnter your Subscribe Topic > ') #Enter Subscribe topic
 
     while(1):
-        txtout = 'sub,'+subscribe+','+''+','+''
-        s.sendto(txtout.encode('utf-8'), addr)  
-        txtin , addre = s.recvfrom(MAX_BUF)
-        txtin = txtin.decode('utf-8')
-        print(subscribe+ '>' +txtin)
-        print('sus')
-        txtpayload , addre = s.recvfrom(MAX_BUF)
-        txtpayload = txtpayload.decode('utf-8')
+        txtin = ''  #Clear Data in txtin Variable
+        txtout = 'sub,'+subscribe+','+''+','+'' #Pattern Data for send to server
+        s.sendto(txtout.encode('utf-8'), addr)  #Convert to byte type and send to server
+        txtin , addre = s.recvfrom(MAX_BUF) #Received Data from server
+        txtin = txtin.decode('utf-8') #Decode Data 
+        print('\t-> Message from '+subscribe+ ' > ' +txtin+'\n') #print data from server
+        txtin = '' #Reset data from server is null
+        break #Stop subscriber
 
-        if(txtpayload == 'cancel'):
-            print('Unsubscriber ...')
-            break
-  
 s.close()
